@@ -1,8 +1,19 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from app.schemas import AssistantRequest, AssistantResponse
 from app.services.assistant_service import AssistantService
 
 app = FastAPI(title="OpenAI Assistant API")
+
+# CORS-Middleware-Konfiguration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://sw01.rogsurvey.de"],  # Erlaubte Ursprünge
+    allow_credentials=True,
+    allow_methods=["*"],  # Erlaubte HTTP-Methoden
+    allow_headers=["*"],  # Erlaubte HTTP-Header
+)
+
 assistant_service = AssistantService()
 
 @app.post("/chat", response_model=AssistantResponse)
